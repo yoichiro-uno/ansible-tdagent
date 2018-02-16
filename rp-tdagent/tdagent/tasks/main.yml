@@ -1,0 +1,39 @@
+---
+- name: gem Instalation
+  apt:
+    name: gem
+    state: latest
+
+- name: Install fluentd
+  gem:
+    name: "{{ item }}"
+    state: latest
+    user_install: no
+  with_items:
+    - fluentd
+    - fluent-plugin-elasticsearch
+
+- name: Create log directory
+  file:
+    path: /var/log/fluent
+    state: directory
+    mode: 0777
+
+- name: create conf directory
+  file:
+    path: /etc/fluent/conf.d
+    state: directory
+    mode: 0755
+    recurse: yes
+
+#- name: Upload fluentd.conf
+#  template:
+#    src: fluentd.conf.j2
+#    dest: /etc/fluent/conf.d/etc/fluentd.conf
+
+- name: start fluentd
+  systemd:
+    name: fluentd
+    state: started
+    enabled: yes
+
