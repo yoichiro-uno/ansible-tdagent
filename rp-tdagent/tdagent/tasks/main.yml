@@ -38,10 +38,15 @@
   shell: /bin/bash -lc "fluentd -s {{ fluentd_confpath }}"
   when: not _config.stat.exists  
 
-- name: Add Conf.d including
-  lineinfile:
+#- name: Add Conf.d including
+#  lineinfile:
+#    dest: "{{ fluentd_confpath }}/fluent.conf"
+#    line: "@include {{ fluentd_confpath }}/conf.d/*.conf"
+
+- name: Upload fluent.conf
+  template:
+    src: fluent.conf.j2
     dest: "{{ fluentd_confpath }}/fluent.conf"
-    line: "@include {{ fluentd_confpath }}/conf.d/*.conf"
 
 - name: start fluentd
 #  systemd:
