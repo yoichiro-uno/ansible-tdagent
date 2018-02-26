@@ -1,0 +1,6 @@
+---
+- name: Configure for sending Sensor data to elasticsearch
+  hosts: all
+  become: yes
+  roles:
+    - elastic_sensor_settings

@@ -1,0 +1,5 @@
+
+- name: Upload Append part of fluentd.conf
+  template:
+    src: fluent.conf.j2
+    dest: "{{ fluentd_confpath }}/conf.d/{{conf_file_name}}.conf"

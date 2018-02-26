@@ -1,8 +1,12 @@
 ---
-- name: gem Instalation
+- name: Install ruby for gem 
   apt:
-    name: gem
+    name: "{{ item }}"
     state: latest
+    update_cache: yes
+  with_items:
+    - ruby
+    - ruby-dev
 
 - name: Install fluentd
   gem:
@@ -11,29 +15,38 @@
     user_install: no
   with_items:
     - fluentd
-    - fluent-plugin-elasticsearch
 
 - name: Create log directory
   file:
-    path: /var/log/fluent
+    path: /var/log/fluentd
     state: directory
     mode: 0777
 
 - name: create conf directory
   file:
-    path: /etc/fluent/conf.d
+    path: "{{ fluentd_confpath }}/conf.d"
     state: directory
     mode: 0755
     recurse: yes
 
-#- name: Upload fluentd.conf
-#  template:
-#    src: fluentd.conf.j2
-#    dest: /etc/fluent/conf.d/etc/fluentd.conf
+- name: Check if config file exists
+  stat:
+    path: "{{ fluentd_confpath }}/fluent.conf"
+  register: _config
+
+- name: Initialize fluentd
+  shell: /bin/bash -lc "fluentd -s {{ fluentd_confpath }}"
+  when: not _config.stat.exists  
+
+- name: Add Conf.d including
+  lineinfile:
+    dest: "{{ fluentd_confpath }}/fluent.conf"
+    line: "@include {{ fluentd_confpath }}/conf.d/*.conf"
 
 - name: start fluentd
-  systemd:
-    name: fluentd
-    state: started
-    enabled: yes
-
+#  systemd:
+#    name: fluentd
+#    state: started
+#    enabled: yes
+  shell: /bin/bash -lc "fluentd -c {{ fluentd_confpath }}/fluent.conf &"
+  register: _result
