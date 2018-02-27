@@ -1,0 +1,9 @@
+
+- name: Upload Append part of conf file
+  template:
+    src: fluent.conf.j2
+    dest: "{{ fluentd_confpath }}/conf.d/{{conf_file_name}}.conf"
+
+- name: Restart fluentd
+  shell: /bin/bash -lc "kill `pgrep fluentd`;sleep 5;fluentd -c {{ fluentd_confpath }}/{{ fluentd_conf }} &"
+  register: _result

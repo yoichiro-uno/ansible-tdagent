@@ -1,0 +1,2 @@
+plugin_list:
+ - fluent-plugin-elasticsearch

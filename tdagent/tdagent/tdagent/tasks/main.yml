@@ -1,0 +1,66 @@
+---
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - gcc
+    - libcurl-devel
+
+#- name: Check td-agent Instalation
+#  shell: /bin/bash -c "which td-agent"
+#  ignore_errors: Trus
+#  register: _existance
+
+#- block:
+#- name: check td-agent shell existance
+#  stat:
+#    path: /tmp/install-redhat-td-agent2.sh
+#  register: _file_exist
+#
+#- name: Get Td-agent Install Shell
+#  get_url:
+#    url: https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh
+#    dest: /tmp/install-redhat-td-agent2.sh
+#    mode: 0777
+#  when: not _file_exist.stat.exists
+#  
+#- name: Install td-agent
+#  shell: /bin/bash -lc "/tmp/install-redhat-td-agent2.sh"
+#  register: _install
+#  failed_when: _install.rc != 0
+#
+#  when: _existance.rc is not 0
+
+- name: Add gpg key for td-agent
+  rpm_key:
+    key: "https://packages.treasuredata.com/GPG-KEY-td-agent"
+
+- name: Add repository for td-agent
+  yum_repository:
+    name: TreasureData
+    description: "treasuredata"
+    baseurl: 'http://packages.treasuredata.com/2/redhat/\$releasever/\$basearch'
+    enabled: yes
+    gpgcheck: yes
+
+- name: Install td-agent
+  yum:
+    name: td-agent
+    state: latest
+
+- name: Create conf directory
+  file:
+    path: "{{ tdagent_confpath }}/conf.d"
+    state: directory
+
+- name: Upload td-agent.conf
+  template:
+    src: td-agent.conf.j2
+    dest: "{{ tdagent_confpath }}/td-agent.conf"
+
+- name: start tdagent
+  systemd:
+    name: td-agent
+    state: started
+    enabled: yes

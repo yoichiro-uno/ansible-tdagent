@@ -1,0 +1,6 @@
+---
+- name: Install td-agent
+  hosts: all
+  become: yes
+  roles:
+    - tdagent

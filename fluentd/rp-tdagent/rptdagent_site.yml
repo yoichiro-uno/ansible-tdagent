@@ -1,0 +1,6 @@
+---
+- name: Install Td-agent to Raspberry pi
+  hosts: all
+  become: yes
+  roles:
+    - tdagent

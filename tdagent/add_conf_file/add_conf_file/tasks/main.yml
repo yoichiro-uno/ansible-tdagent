@@ -1,0 +1,16 @@
+- name: Stop tdagent
+  systemd:
+    name: td-agent
+    state: stopped
+
+- name: Upload Append part of conf file
+  template:
+    src: "{{ item }}.conf.j2"
+    dest: "{{ tdagent_confpath }}/conf.d/{{ item }}.conf"
+  with_items:
+    - "{{ config_list }}"
+
+- name: restart tdagent
+  systemd:
+    name: td-agent
+    state: started

@@ -1,0 +1,6 @@
+---
+- name: Install Plugins
+  hosts: all
+  become: yes
+  roles:
+    - installplugins

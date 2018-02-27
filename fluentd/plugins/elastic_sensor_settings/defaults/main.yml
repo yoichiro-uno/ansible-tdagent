@@ -1,0 +1,11 @@
+fluentd_confpath: /etc/fluentd/conf
+fluentd_conf: fluent.conf
+conf_file_name: sensor_conf
+sensor_data_path: /data/share/sensor
+sensor_log_name: sensor.log
+elasticsearch_host_ip: 172.21.11.147
+elasticsearch_host_port: 9200
+elasticsearch_type_name: sensordata
+elasticsearch_index_name: fluentd
+elasticsearch_logstash_prefix: sensordata
+elasticsearch_flush_interval: 10s

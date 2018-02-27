@@ -1,0 +1,14 @@
+<match elasticsearch.{{tag_name}}>
+  @type copy
+  <store>
+    @type elasticsearch
+    host {{elasticsearch_host_ip}}
+    port {{elasticsearch_host_port}}
+    type_name {{elasticsearch_type_name}}
+    index_name {{elasticsearch_index_name}}
+    logstash_format true
+    logstash_prefix {{elasticsearch_logstash_prefix}}
+    logstash_dateformat %Y.%m.%d
+    flush_interval {{elasticsearch_flush_interval}}
+  </store>
+</match>

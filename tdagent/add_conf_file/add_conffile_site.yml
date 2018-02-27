@@ -1,0 +1,6 @@
+---
+- name: add conf file
+  hosts: all
+  become: yes
+  roles:
+    - add_conf_file

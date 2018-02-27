@@ -1,0 +1,32 @@
+<source>
+  @type tail
+  format json
+  path /data/share/sensor/sensor.log
+  pos_file /data/share/sensor/sensor.log.pos
+  tag elasticsearch.sensordata
+#  tag sensor.data
+</source>
+<match elasticsearch.sensordata>
+#  @type copy
+#  <store>
+#    @type elasticsearch
+#    host 172.21.11.147
+#    port 9200
+#    type_name sensordata
+#    index_name fluentd
+#    logstash_format true
+#    logstash_prefix sensordata
+#    logstash_dateformat %Y.%m.%d
+#    flush_interval 10s
+#  </store>
+## debug
+#  <store>
+#    @type file
+#    path /data/share/sensor/sensor.log.debug.log
+#  </store>
+   @type forward
+   <server>
+     host 172.21.11.147
+     port 24224
+   </server>
+</match>
