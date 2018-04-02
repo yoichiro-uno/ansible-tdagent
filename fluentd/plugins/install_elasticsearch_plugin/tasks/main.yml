@@ -8,9 +8,5 @@
     - fluent-plugin-elasticsearch
 
 - name: Restart fluentd
-#  systemd:
-#    name: fluentd
-#    state: started
-#    enabled: yes
   shell: /bin/bash -lc "kill `pgrep fluentd`;sleep 5;fluentd -c {{ fluentd_confpath }}/fluent.conf &"
   register: _result

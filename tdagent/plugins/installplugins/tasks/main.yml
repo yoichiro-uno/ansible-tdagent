@@ -1,9 +1,5 @@
 ---
 - name: Install  plugins
-#  gem:
-#    name: "{{ item }}"
-#    executable: /usr/sbin/td-agent-gem
-#    state: latest
   shell: /bin/bash -lc "/usr/sbin/td-agent-gem install {{ item }}"
   with_items:
     - "{{ plugin_list }}"
